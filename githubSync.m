@@ -1,4 +1,4 @@
-function githubSync(dependencies)
+function githubSync(dependencies, varargin)
 % This function takes a cell array of url's to hithub repositories, loop through
 % them and ensure they exist on the path, or clone them to your local machine.
 %
@@ -11,13 +11,33 @@ function githubSync(dependencies)
 % Written by Ben Vincent
 % https://github.com/drbenvincent/github-sync-matlab
 
-% input checking
-assert(iscellstr(dependencies),'Input to function should be a cell array of url''s to github repositories')
-if iscolumn(dependencies), dependencies=dependencies'; end
+%% Process inputs
+p = inputParser;
+p.FunctionName = mfilename;
+p.addRequired('dependencies',@iscellstr);
+p.addParameter('exclude',[], @isvector);
+p.parse(dependencies, varargin{:});
 
+% deal with row or column inputs
+if iscolumn(p.Results.dependencies)
+	dependencies = p.Results.dependencies'; 
+end
+
+% Return to original path on cleanup
 originalPath = cd;
 returnToOrginalDir = onCleanup(@() myCleanupFun(originalPath));
 
+% Optionally exclude dependencies
+if ~isempty(p.Results.exclude)
+	assert(numel(dependencies)==numel(p.Results.exclude),...
+		'exclude and dependencies must be same length')
+	dependencies = dependencies(p.Results.exclude ~= true);
+	if isempty(dependencies)
+		return
+	end
+end
+
+%% Main algorithm
 for url=dependencies
 	cloneOrUpdateDependency(url{:});
 end

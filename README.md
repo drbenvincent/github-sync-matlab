@@ -24,3 +24,8 @@ dependencies={
     'https://github.com/altmany/export_fig'};
 githubSync(dependencies)
 ```
+## Optional input arguments
+Optionally provide a vector (same length as `dependencies`) indicating which dependencies to exclude from updates. The vector can be logical (`true` or `false`) or binary (`0` or `1`).
+```matlab
+githubSync(dependencies, 'exclude', [false true])
+```
