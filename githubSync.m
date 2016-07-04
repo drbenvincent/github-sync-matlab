@@ -16,6 +16,7 @@ p = inputParser;
 p.FunctionName = mfilename;
 p.addRequired('dependencies',@iscellstr);
 p.addParameter('exclude',[], @isvector);
+p.addParameter('selfUpdate',[], @islogical);
 p.parse(dependencies, varargin{:});
 
 % deal with row or column inputs
@@ -35,6 +36,11 @@ if ~isempty(p.Results.exclude)
 	if isempty(dependencies)
 		return
 	end
+end
+
+% Shall we update the updater? Recursive black-magic
+if p.Results.selfUpdate
+	githubSync({'https://github.com/drbenvincent/github-sync-matlab'})
 end
 
 %% Main algorithm

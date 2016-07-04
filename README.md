@@ -25,7 +25,14 @@ dependencies={
 githubSync(dependencies)
 ```
 ## Optional input arguments
+### Selective updating
 Optionally provide a vector (same length as `dependencies`) indicating which dependencies to exclude from updates. The vector can be logical (`true` or `false`) or binary (`0` or `1`).
 ```matlab
 githubSync(dependencies, 'exclude', [false true])
+```
+
+### Update the updater
+Get any updates to this updating code ;) Uses recursive black magic.
+```matlab
+githubSync(dependencies, 'selfUpdate', true)
 ```
