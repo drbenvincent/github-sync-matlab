@@ -8,7 +8,11 @@ function githubSync(dependencies)
 % 	'https://github.com/drbenvincent/mcmc-utils-matlab',...
 % 	'https://github.com/altmany/export_fig'};
 
+% input checking
 assert(iscellstr(dependencies),'Input to function should be a cell array of url''s to github repositories')
+
+originalPath = cd;
+returnToOrginalDir = onCleanup(@() myCleanupFun(originalPath));
 
 for url=dependencies
 	cloneOrUpdateDependency(url{:});
@@ -57,7 +61,6 @@ function onPath = isRepoFolderOnPath(repoName)
 end
 
 function cloneGitHubRepo(repoAddress, installPath)
-    originalPath = cd;
 	try
 		cd(installPath)
 		command = sprintf('git clone %s.git', repoAddress);
@@ -65,25 +68,17 @@ function cloneGitHubRepo(repoAddress, installPath)
 	catch
 		error('git clone failed')
 	end
-    cd(originalPath)
 end
 
 function updateGitHubRepo(installPath,repoName)
-originalPath = cd;
 try
 	cd(fullfile(installPath,repoName))
 	system('git pull');
 catch
 	warning('Unable to update GitHub repository')
 end
-cd(originalPath)
 end
 
-
-
-% TODO: Work out how to make this closure work in Matlab
-% function results = pathReturner(func)
-%     originalPath = cd;
-%     % results = function
-%     cd(originalPath)
-% end
+function myCleanupFun(originalPath)
+cd(originalPath)
+end
