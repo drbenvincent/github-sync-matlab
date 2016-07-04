@@ -25,7 +25,7 @@ end
 
 % Return to original path on cleanup
 originalPath = cd;
-returnToOrginalDir = onCleanup(@() myCleanupFun(originalPath));
+returnToOrginalDir = onCleanup(@() cd(originalPath));
 
 % Optionally exclude dependencies
 if ~isempty(p.Results.exclude)
@@ -101,8 +101,4 @@ try
 catch
 	warning('Unable to update GitHub repository')
 end
-end
-
-function myCleanupFun(originalPath)
-cd(originalPath)
 end
