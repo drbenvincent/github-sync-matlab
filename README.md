@@ -1,5 +1,5 @@
 # checkGitHubDependencies
-If your Matlab project uses other GitHub repositories, then you can use this function to make those those dependencies are installed and updated.
+If your Matlab project uses other GitHub repositories, then you can use this function to ensure those those dependencies are installed (cloned) and updated.
 
 ## Installation
 
@@ -19,8 +19,8 @@ addpath('~/Documents/Matlab/github-sync-matlab')
 
 Use as follows. *Warning this will download or update the repositories to your machine.*
 ```matlab
-dependencies={...
-    'https://github.com/drbenvincent/mcmc-utils-matlab',...
+dependencies={
+    'https://github.com/drbenvincent/mcmc-utils-matlab',
     'https://github.com/altmany/export_fig'};
 githubSync(dependencies)
 ```
