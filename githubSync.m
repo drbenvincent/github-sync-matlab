@@ -10,6 +10,7 @@ function githubSync(dependencies)
 
 % input checking
 assert(iscellstr(dependencies),'Input to function should be a cell array of url''s to github repositories')
+if iscolumn(dependencies), dependencies=dependencies'; end
 
 originalPath = cd;
 returnToOrginalDir = onCleanup(@() myCleanupFun(originalPath));
