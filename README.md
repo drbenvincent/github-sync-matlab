@@ -1,4 +1,4 @@
-# checkGitHubDependencies
+# GitHub repository synchronization for Matlab
 If your Matlab project uses other GitHub repositories, then you can use this function to ensure those those dependencies are installed (cloned) and updated.
 
 ## Installation

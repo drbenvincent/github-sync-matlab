@@ -7,6 +7,9 @@ function githubSync(dependencies)
 % dependencies={...
 % 	'https://github.com/drbenvincent/mcmc-utils-matlab',...
 % 	'https://github.com/altmany/export_fig'};
+%
+% Written by Ben Vincent
+% https://github.com/drbenvincent/github-sync-matlab
 
 % input checking
 assert(iscellstr(dependencies),'Input to function should be a cell array of url''s to github repositories')
