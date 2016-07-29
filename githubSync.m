@@ -54,11 +54,11 @@ end
 function cloneOrUpdateDependency(url)
 displayDependencyToCommandWindow(url);
 repoName = getRepoNameFromUrl(url);
-addpath(fullfile(defineInstallPath(),repoName));
 if ~isRepoFolderOnPath(repoName)
+	addpath(fullfile(defineInstallPath(),repoName)); % TODO: check this... on first install, the folder won't exist
 	cloneGitHubRepo(url, defineInstallPath());
 else
-	updateGitHubRepo(defineInstallPath(),repoName);
+	updateGitHubRepo(findPathContainingRepo(repoName),repoName);
 end
 end
 
@@ -102,9 +102,33 @@ end
 
 function updateGitHubRepo(installPath,repoName)
 try
+	% TODO: confirm this works when the repo is private.
 	cd(fullfile(installPath,repoName))
 	system('git pull');
 catch
 	warning('Unable to update GitHub repository')
 end
+end
+
+function repoPath = findPathContainingRepo(repoName)
+% requested repoName was found as a folder on the path. This function
+% returns the path of the folder containing that repo.
+allPaths = strsplit(path, ':');
+isMatch = cell2mat(cellfun(@isTargetPath, allPaths, 'UniformOutput', false));
+if sum(isMatch)==1
+		repoPath = fileparts(allPaths{ find(isMatch,1) });
+		return
+elseif sum(isMatch)==0
+	error('previous found repo on path, but failed to locate path')
+elseif sum(isMatch)>1
+	disp(allPaths{isMatch==1})
+	error('found multiple possible folders that could correspond to target repo')
+end
+
+	function isTarget = isTargetPath(p)
+		isTarget = strcmp(repoName, getFolderFromPath(p));
+	end
+	function foldername = getFolderFromPath(p)
+		[~, foldername] = fileparts(p);
+	end
 end
