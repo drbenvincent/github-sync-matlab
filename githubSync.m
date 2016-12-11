@@ -113,7 +113,7 @@ end
 function repoPath = findPathContainingRepo(repoName)
 % requested repoName was found as a folder on the path. This function
 % returns the path of the folder containing that repo.
-allPaths = strsplit(path, ':');
+allPaths = strsplit(path, systemDelimiter());
 isMatch = cell2mat(cellfun(@isTargetPath, allPaths, 'UniformOutput', false));
 if sum(isMatch)==1
 		repoPath = fileparts(allPaths{ find(isMatch,1) });
@@ -131,4 +131,12 @@ end
 	function foldername = getFolderFromPath(p)
 		[~, foldername] = fileparts(p);
 	end
+end
+
+function delimiter = systemDelimiter()
+if ismac
+		delimiter = ':';
+	elseif ispc
+		delimiter = ';';
+end
 end
